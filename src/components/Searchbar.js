@@ -1,11 +1,12 @@
 "use client"
 
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import Icons from "./Icons";
 
 const SearchBar = ({ searchState, setSearchState, serachTransform, setSearchTransform }) => {
 
     const [search, setSearch] = useState('');
+    const [isMobile, setIsMobile] = useState(false);
 
     const closeSearch = () => {
         setSearchState(0)
@@ -14,8 +15,17 @@ const SearchBar = ({ searchState, setSearchState, serachTransform, setSearchTran
 
     const style = {
         opacity: `${searchState}`,
-        transform: `${window.innerWidth < 1024 ? serachTransform == false ? 'translateX(-100%)' : 'translateX(0px)' : ''}`
+        transform: `${isMobile == true ? serachTransform == false ? 'translateX(-100%)' : 'translateX(0px)' : ''}`
     }
+
+    useEffect(() => {
+        const handleResize = () => {
+            window.innerWidth < 1024 ? setIsMobile(true) : setIsMobile(false)
+        };
+
+        handleResize(); // Run initially
+        window.addEventListener("resize", handleResize);
+    }, [])
 
     return (
         <div className="search-bar" style={style}>
